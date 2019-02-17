@@ -31,10 +31,10 @@ export const BlogPostTemplate = ({
   const PostContent = contentComponent || Content
   const imIn = () =>
     generateHeaders().then(
-      headers => (console.log(headers),
-      fetch('/.netlify/functions/test', { headers }).then(response =>
-        console.log(response.json())
-      ))
+      headers =>
+        fetch('/.netlify/functions/test', { headers })
+          .then(response => response.json())
+          .then(r => console.log(r))
     )
   const imOut = () =>
     fetch('/.netlify/functions/test')

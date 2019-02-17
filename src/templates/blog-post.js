@@ -5,6 +5,20 @@ import Helmet from 'react-helmet'
 import { graphql, Link } from 'gatsby'
 import Layout from '../components/Layout'
 import Content, { HTMLContent } from '../components/Content'
+import netlifyIdentity from 'netlify-identity-widget'
+
+const generateHeaders = () => {
+  const headers = { 'Content-Type': 'application/json' }
+  if (netlifyIdentity.currentUser()) {
+    return netlifyIdentity
+      .currentUser()
+      .jwt()
+      .then(token => {
+        return { ...headers, Authorization: `Bearer ${token}` }
+      })
+  }
+  return Promise.resolve(headers)
+}
 
 export const BlogPostTemplate = ({
   content,
@@ -12,9 +26,24 @@ export const BlogPostTemplate = ({
   description,
   tags,
   title,
-  helmet,
+  helmet
 }) => {
   const PostContent = contentComponent || Content
+  const imIn = () =>
+    generateHeaders().then(
+      headers => (console.log(headers),
+      fetch('/.netlify/functions/test', { headers }).then(response =>
+        console.log(response)
+      ))
+    )
+  const imOut = () =>
+    fetch('/.netlify/functions/test')
+      .then(response => response.json())
+      .then(r => console.log(r))
+
+  React.useEffect(() => {
+    netlifyIdentity.init()
+  }, [])
 
   return (
     <section className="section">
@@ -27,18 +56,9 @@ export const BlogPostTemplate = ({
             </h1>
             <p>{description}</p>
             <PostContent content={content} />
-            {tags && tags.length ? (
-              <div style={{ marginTop: `4rem` }}>
-                <h4>Tags</h4>
-                <ul className="taglist">
-                  {tags.map(tag => (
-                    <li key={tag + `tag`}>
-                      <Link to={`/tags/${kebabCase(tag)}/`}>{tag}</Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : null}
+
+            <button onClick={imIn}>I'm in</button>
+            <button onClick={imOut}>Not available</button>
           </div>
         </div>
       </div>
@@ -51,7 +71,7 @@ BlogPostTemplate.propTypes = {
   contentComponent: PropTypes.func,
   description: PropTypes.string,
   title: PropTypes.string,
-  helmet: PropTypes.object,
+  helmet: PropTypes.object
 }
 
 const BlogPost = ({ data }) => {
@@ -66,10 +86,7 @@ const BlogPost = ({ data }) => {
         helmet={
           <Helmet titleTemplate="%s | Blog">
             <title>{`${post.frontmatter.title}`}</title>
-            <meta
-              name="description"
-              content={`${post.frontmatter.description}`}
-            />
+            <meta name="description" content={`${post.frontmatter.description}`} />
           </Helmet>
         }
         tags={post.frontmatter.tags}
@@ -81,8 +98,8 @@ const BlogPost = ({ data }) => {
 
 BlogPost.propTypes = {
   data: PropTypes.shape({
-    markdownRemark: PropTypes.object,
-  }),
+    markdownRemark: PropTypes.object
+  })
 }
 
 export default BlogPost

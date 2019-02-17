@@ -26,6 +26,7 @@
     "netlify-identity-widget": "^1.5.2",
     "netlify-lambda": "^1.4.2",
     "node-sass": "^4.11.0",
+    "npm-run-all": "^4.1.5",
     "parcel-bundler": "^1.9.4",
     "prop-types": "^15.6.0",
     "react": "^16.8.2",
@@ -39,9 +40,13 @@
   "license": "MIT",
   "main": "n/a",
   "scripts": {
-    "start": "npm run develop",
+    "start": "npm-run-all --parallel start:app start:server",
+    "start:app": "npm run develop",
+    "start:server": "netlify-lambda serve functions",
     "clean": "rimraf .cache public",
-    "build": "npm run clean && gatsby build",
+    "build": "npm-run-all --parallel build:**",
+    "build:app": "npm run clean && gatsby build",
+    "build:functions": "netlify-lambda build functions",
     "develop": "npm run clean && gatsby develop",
     "serve": "gatsby serve",
     "format": "prettier --trailing-comma es5 --no-semi --single-quote --write \"{gatsby-*.js,src/**/*.js}\"",
@@ -50,5 +55,13 @@
   "devDependencies": {
     "prettier": "^1.15.3",
     "rimraf": "^2.6.2"
+  },
+  "proxy": {
+    "/.netlify/functions": {
+      "target": "http://localhost:9000",
+      "pathRewrite": {
+        "^/\\.netlify/functions": ""
+      }
+    }
   }
 }

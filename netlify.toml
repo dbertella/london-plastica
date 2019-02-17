@@ -1,4 +1,5 @@
 [build]
+  functions = "functions-build"
   publish = "public"
   command = "npm run build"
 [build.environment]

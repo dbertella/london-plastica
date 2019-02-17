@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { kebabCase } from 'lodash'
 import Helmet from 'react-helmet'
-import { graphql, Link } from 'gatsby'
+import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
 import Content, { HTMLContent } from '../components/Content'
 import netlifyIdentity from 'netlify-identity-widget'
@@ -30,16 +29,29 @@ export const BlogPostTemplate = ({
 }) => {
   const PostContent = contentComponent || Content
   const imIn = () =>
-    generateHeaders().then(
-      headers =>
-        fetch('/.netlify/functions/test', { headers })
-          .then(response => response.json())
-          .then(r => console.log(r))
+    generateHeaders().then(headers =>
+      fetch('/.netlify/functions/test', { headers })
+        .then(response => response.json())
+        .then(r => console.log(r))
     )
   const imOut = () =>
-    fetch('/.netlify/functions/test')
-      .then(response => response.json())
-      .then(r => console.log(r))
+    generateHeaders().then(headers =>
+      fetch('/.netlify/functions/test', { headers })
+        .then(response => response.json())
+        .then(r => console.log(r))
+    )
+  const getAll = () =>
+    generateHeaders().then(headers =>
+      fetch('/.netlify/functions/get-all', { headers })
+        .then(response => response.json())
+        .then(r => console.log(r))
+    )
+  const getAllByDate = () =>
+    generateHeaders().then(headers =>
+      fetch('/.netlify/functions/get-all-by-date', { headers })
+        .then(response => response.json())
+        .then(r => console.log(r))
+    )
 
   React.useEffect(() => {
     netlifyIdentity.init()
@@ -59,6 +71,8 @@ export const BlogPostTemplate = ({
 
             <button onClick={imIn}>I'm in</button>
             <button onClick={imOut}>Not available</button>
+            <button onClick={getAll}>Get all</button>
+            <button onClick={getAllByDate}>Get by date</button>
           </div>
         </div>
       </div>

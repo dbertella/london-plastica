@@ -2,12 +2,12 @@ import faunadb from 'faunadb'
 
 const q = faunadb.query
 const client = new faunadb.Client({
-  secret: process.env.FAUNADB_SERVER_SECRET
+  secret: process.env.FAUNADB_SECRET
 })
 
 exports.handler = (event, context, callback) => {
   console.log("Function `todo-read-all` invoked")
-  return client.query(q.Paginate(q.Match(q.Ref("indexes/date"))))
+  return client.query(q.Paginate(q.Match(q.Ref("indexes/all_players"))))
   .then((response) => {
     const todoRefs = response.data
     console.log("Todo refs", todoRefs)

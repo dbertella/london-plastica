@@ -3,13 +3,13 @@ import { last } from 'lodash'
 
 const q = faunadb.query
 const client = new faunadb.Client({
-  secret: process.env.FAUNADB_SERVER_SECRET
+  secret: process.env.FAUNADB_SECRET
 })
 
 exports.handler = (event, context, callback) => {
   const date = last(event.path.split('/'))
   console.log(`Function 'todo-read' invoked. Read date: ${date}`)
-  return client.query(q.Get(q.Ref(`classes/todos/${date}`)))
+  return client.query(q.Get(q.Ref(`classes/players/${date}`)))
   .then((response) => {
     console.log("success", response)
     return callback(null, {

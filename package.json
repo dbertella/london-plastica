@@ -42,11 +42,11 @@
   "scripts": {
     "start": "npm-run-all --parallel start:app start:server",
     "start:app": "npm run develop",
-    "start:server": "netlify-lambda serve functions",
+    "start:server": "netlify-lambda serve functions -c ./webpack.config.js",
     "clean": "rimraf .cache public",
     "build": "npm-run-all --parallel build:**",
     "build:app": "npm run clean && gatsby build",
-    "build:functions": "netlify-lambda build functions",
+    "build:functions": "netlify-lambda build functions -c ./webpack.config.js",
     "develop": "npm run clean && gatsby develop",
     "serve": "gatsby serve",
     "format": "prettier --trailing-comma es5 --no-semi --single-quote --write \"{gatsby-*.js,src/**/*.js}\"",

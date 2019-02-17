@@ -4,13 +4,13 @@ exports.handler = (event, context) => {
   // "context" has information about the lambda environment and user details
   console.log('context', context)
 
-  const { user } = context.clientContext;
+  const { user } = context.clientContext
   console.log(user)
   // The "callback" ends the execution of the function and returns a reponse back to the caller
-  return callback(null, {
+  return {
     statusCode: 200,
     body: JSON.stringify({
       data: '⊂◉‿◉つ'
     })
-  })
+  }
 }

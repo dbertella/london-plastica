@@ -33,7 +33,7 @@ export const BlogPostTemplate = ({
     generateHeaders().then(
       headers => (console.log(headers),
       fetch('/.netlify/functions/test', { headers }).then(response =>
-        console.log(response)
+        console.log(response.json())
       ))
     )
   const imOut = () =>

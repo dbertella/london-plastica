@@ -7,7 +7,7 @@ exports.handler = (event, context, callback) => {
   const { user } = context.clientContext
   console.log(user)
   // The "callback" ends the execution of the function and returns a reponse back to the caller
-  return callback({
+  return callback(null, {
     statusCode: 200,
     body: JSON.stringify({
       data: '⊂◉‿◉つ'

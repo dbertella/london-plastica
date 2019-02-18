@@ -5,12 +5,7 @@ import { Link, graphql } from 'gatsby'
 import Layout from '../components/Layout'
 import BlogRoll from '../components/BlogRoll'
 
-export const IndexPageTemplate = ({
-  image,
-  title,
-  subheading,
-  mainpitch,
-}) => (
+export const IndexPageTemplate = ({ image, title, subheading, mainpitch }) => (
   <div>
     <div
       className="full-width-image margin-top-0"
@@ -59,31 +54,21 @@ export const IndexPageTemplate = ({
       </div>
     </div>
     <section className="section section--gradient">
-      <div className="container">
-        <div className="section">
-          <div className="columns">
-            <div className="column is-10 is-offset-1">
-              <div className="content">
-                <div className="content">
-                  <div className="tile">
-                    <h1 className="title">{mainpitch.title}</h1>
-                  </div>
-                  <div className="tile">
-                    <h3 className="subtitle">{mainpitch.description}</h3>
-                  </div>
-                </div>
-                <div className="column is-12">
-                  <h3 className="has-text-weight-semibold is-size-2">Next Matches</h3>
-                  <BlogRoll />
-                  <div className="column is-12 has-text-centered">
-                    <Link className="btn" to="/blog">
-                      Check them all
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      <div className="content">
+        <div className="tile">
+          <h1 className="title">{mainpitch.title}</h1>
+        </div>
+        <div className="tile">
+          <h3 className="subtitle">{mainpitch.description}</h3>
+        </div>
+      </div>
+      <div className="column is-12">
+        <h3 className="has-text-weight-semibold is-size-2">Next Matches</h3>
+        <BlogRoll />
+        <div className="column is-12 has-text-centered">
+          <Link className="btn" to="/blog">
+            Check them all
+          </Link>
         </div>
       </div>
     </section>
@@ -94,7 +79,7 @@ IndexPageTemplate.propTypes = {
   image: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
   title: PropTypes.string,
   subheading: PropTypes.string,
-  mainpitch: PropTypes.object,
+  mainpitch: PropTypes.object
 }
 
 const IndexPage = ({ data }) => {

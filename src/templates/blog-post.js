@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
+import Players from '../components/Players'
 import Content, { HTMLContent } from '../components/Content'
 import netlifyIdentity from 'netlify-identity-widget'
 
@@ -53,10 +54,6 @@ export const BlogPostTemplate = ({
         .then(r => console.log(r))
     )
 
-  // React.useEffect(() => {
-  //   netlifyIdentity.init()
-  // }, [])
-
   return (
     <section className="section">
       {helmet || ''}
@@ -69,11 +66,17 @@ export const BlogPostTemplate = ({
             <p>{date}</p>
             <p>{duration} h</p>
             <PostContent content={content} />
-
-            <button onClick={imIn}>I'm in</button>
-            <button onClick={imOut}>Not available</button>
-            <button onClick={getAll}>Get all</button>
+            <Players
+              date={date}
+            />
             <button onClick={getAllByDate}>Get by date</button>
+            {netlifyIdentity.currentUser() && (
+              <>
+                <button onClick={imIn}>I'm in</button>
+                <button onClick={imOut}>Not available</button>
+                <button onClick={getAll}>Get all</button>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -84,7 +87,6 @@ export const BlogPostTemplate = ({
 BlogPostTemplate.propTypes = {
   content: PropTypes.node.isRequired,
   contentComponent: PropTypes.func,
-  description: PropTypes.string,
   title: PropTypes.string,
   date: PropTypes.string,
   duration: PropTypes.string,
@@ -99,15 +101,14 @@ const BlogPost = ({ data }) => {
       <BlogPostTemplate
         content={post.html}
         contentComponent={HTMLContent}
-        description={post.frontmatter.description}
         helmet={
-          <Helmet titleTemplate="%s | Blog">
+          <Helmet titleTemplate="%s | Game">
             <title>{`${post.frontmatter.title}`}</title>
           </Helmet>
         }
         title={post.frontmatter.title}
         date={post.frontmatter.date}
-        duration={post.frontmatter.duration}
+        duration={String(post.frontmatter.duration)}
       />
     </Layout>
   )
@@ -129,7 +130,6 @@ export const pageQuery = graphql`
       frontmatter {
         date(formatString: "MMMM DD, YYYY HH:mm")
         title
-        description
         duration
       }
     }

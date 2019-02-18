@@ -5,6 +5,7 @@ import netlifyIdentity from 'netlify-identity-widget'
 
 const Navbar = class extends React.Component {
   componentDidMount() {
+    netlifyIdentity.init()
     // Get all "navbar-burger" elements
     const $navbarBurgers = Array.prototype.slice.call(
       document.querySelectorAll('.navbar-burger'),
@@ -42,7 +43,7 @@ const Navbar = class extends React.Component {
         <div className="container">
           <div className="navbar-brand">
             <Link to="/" className="navbar-item" title="Logo">
-              <img src={logo} alt="Kaldi" style={{ width: '88px' }} />
+              London Plastica
             </Link>
             {/* Hamburger menu */}
             <div className="navbar-burger burger" data-target="navMenu">
@@ -54,7 +55,7 @@ const Navbar = class extends React.Component {
           <div id="navMenu" className="navbar-menu">
             <div className="navbar-end has-text-centered">
               <a href="#" onClick={this.handleIdentity}>
-                User Status
+                Login
               </a>
             </div>
           </div>

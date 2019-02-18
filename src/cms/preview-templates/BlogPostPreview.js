@@ -8,7 +8,7 @@ const BlogPostPreview = ({ entry, widgetFor }) => (
     description={entry.getIn(['data', 'description'])}
     tags={entry.getIn(['data', 'tags'])}
     title={entry.getIn(['data', 'title'])}
-    date={entry.getIn(['data', 'date'])}
+    date={String(new Date(entry.getIn(['data', 'date'])).toISOString())}
     duration={entry.getIn(['data', 'duration'])}
   />
 )

@@ -1,32 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import netlifyIdentity from 'netlify-identity-widget'
 
-const generateHeaders = () => {
-  const headers = { 'Content-Type': 'application/json' }
-  if (netlifyIdentity.currentUser()) {
-    return netlifyIdentity
-      .currentUser()
-      .jwt()
-      .then(token => {
-        return { ...headers, Authorization: `Bearer ${token}` }
-      })
-  }
-  return Promise.resolve(headers)
-}
-
-const Players = () => {
+const Players = ({ date }) => {
   const [players, setPlayers] = useState([])
   useEffect(() => {
-    fetch('/.netlify/functions/get-all')
+    fetch(`/.netlify/functions/get-all-by-date/${date}`)
       .then(response => response.json())
-      .then(r => setPlayers(r.map(player => player.data)))
+      .then(res => setPlayers(res.data))
   }, [])
+
+  const countAvailable = players.filter(([available]) => available).length
   return (
     <div>
-      Players
-      {players.map(p => (
-        <div key={p.name + p.date}>
-          {p.name} - {p.date} - {p.available}
+      <h3>Players ({countAvailable} available)</h3>
+      {players.map(([available, name]) => (
+        <div key={name}>
+          {name} - {available ? '👍' : '👎'}
         </div>
       ))}
     </div>

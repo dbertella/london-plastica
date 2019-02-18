@@ -1,24 +1,12 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
 import Players from '../components/Players'
+import Book from '../components/Book'
 import Content, { HTMLContent } from '../components/Content'
-import netlifyIdentity from 'netlify-identity-widget'
-
-const generateHeaders = () => {
-  const headers = { 'Content-Type': 'application/json' }
-  if (netlifyIdentity.currentUser()) {
-    return netlifyIdentity
-      .currentUser()
-      .jwt()
-      .then(token => {
-        return { ...headers, Authorization: `Bearer ${token}` }
-      })
-  }
-  return Promise.resolve(headers)
-}
+import { format } from 'date-fns'
 
 export const BlogPostTemplate = ({
   content,
@@ -29,31 +17,6 @@ export const BlogPostTemplate = ({
   helmet
 }) => {
   const PostContent = contentComponent || Content
-  const imIn = () =>
-    generateHeaders().then(headers =>
-      fetch('/.netlify/functions/test', { headers })
-        .then(response => response.json())
-        .then(r => console.log(r))
-    )
-  const imOut = () =>
-    generateHeaders().then(headers =>
-      fetch('/.netlify/functions/test', { headers })
-        .then(response => response.json())
-        .then(r => console.log(r))
-    )
-  const getAll = () =>
-    generateHeaders().then(headers =>
-      fetch('/.netlify/functions/get-all', { headers })
-        .then(response => response.json())
-        .then(r => console.log(r))
-    )
-  const getAllByDate = () =>
-    generateHeaders().then(headers =>
-      fetch('/.netlify/functions/get-all-by-date', { headers })
-        .then(response => response.json())
-        .then(r => console.log(r))
-    )
-
   return (
     <section className="section">
       {helmet || ''}
@@ -66,17 +29,6 @@ export const BlogPostTemplate = ({
             <p>{date}</p>
             <p>{duration} h</p>
             <PostContent content={content} />
-            <Players
-              date={date}
-            />
-            <button onClick={getAllByDate}>Get by date</button>
-            {netlifyIdentity.currentUser() && (
-              <>
-                <button onClick={imIn}>I'm in</button>
-                <button onClick={imOut}>Not available</button>
-                <button onClick={getAll}>Get all</button>
-              </>
-            )}
           </div>
         </div>
       </div>
@@ -95,7 +47,7 @@ BlogPostTemplate.propTypes = {
 
 const BlogPost = ({ data }) => {
   const { markdownRemark: post } = data
-  console.log(data)
+  const formattedDate = format(new Date(post.frontmatter.date), 'YYYY-MM-DD')
   return (
     <Layout>
       <BlogPostTemplate
@@ -110,6 +62,24 @@ const BlogPost = ({ data }) => {
         date={post.frontmatter.date}
         duration={String(post.frontmatter.duration)}
       />
+      <section className="section">
+        <div className="container content">
+          <div className="columns">
+            <div className="column is-10 is-offset-1">
+              <Players date={formattedDate} />
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="section">
+        <div className="container content">
+          <div className="columns">
+            <div className="column is-10 is-offset-1">
+              <Book date={formattedDate} />
+            </div>
+          </div>
+        </div>
+      </section>
     </Layout>
   )
 }

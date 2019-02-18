@@ -1,11 +1,9 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import logo from '../img/logo.svg'
 import netlifyIdentity from 'netlify-identity-widget'
 
 const Navbar = class extends React.Component {
   componentDidMount() {
-    netlifyIdentity.init()
     // Get all "navbar-burger" elements
     const $navbarBurgers = Array.prototype.slice.call(
       document.querySelectorAll('.navbar-burger'),
@@ -54,9 +52,9 @@ const Navbar = class extends React.Component {
           </div>
           <div id="navMenu" className="navbar-menu">
             <div className="navbar-end has-text-centered">
-              <a href="#" onClick={this.handleIdentity}>
+              <button onClick={this.handleIdentity}>
                 Login
-              </a>
+              </button>
             </div>
           </div>
         </div>

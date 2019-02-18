@@ -22,8 +22,9 @@ const generateHeaders = () => {
 export const BlogPostTemplate = ({
   content,
   contentComponent,
-  description,
   title,
+  date,
+  duration,
   helmet
 }) => {
   const PostContent = contentComponent || Content
@@ -52,9 +53,9 @@ export const BlogPostTemplate = ({
         .then(r => console.log(r))
     )
 
-  React.useEffect(() => {
-    netlifyIdentity.init()
-  }, [])
+  // React.useEffect(() => {
+  //   netlifyIdentity.init()
+  // }, [])
 
   return (
     <section className="section">
@@ -65,7 +66,8 @@ export const BlogPostTemplate = ({
             <h1 className="title is-size-2 has-text-weight-bold is-bold-light">
               {title}
             </h1>
-            <p>{description}</p>
+            <p>{date}</p>
+            <p>{duration} h</p>
             <PostContent content={content} />
 
             <button onClick={imIn}>I'm in</button>
@@ -84,12 +86,14 @@ BlogPostTemplate.propTypes = {
   contentComponent: PropTypes.func,
   description: PropTypes.string,
   title: PropTypes.string,
+  date: PropTypes.string,
+  duration: PropTypes.string,
   helmet: PropTypes.object
 }
 
 const BlogPost = ({ data }) => {
   const { markdownRemark: post } = data
-
+  console.log(data)
   return (
     <Layout>
       <BlogPostTemplate
@@ -99,10 +103,11 @@ const BlogPost = ({ data }) => {
         helmet={
           <Helmet titleTemplate="%s | Blog">
             <title>{`${post.frontmatter.title}`}</title>
-            <meta name="description" content={`${post.frontmatter.description}`} />
           </Helmet>
         }
         title={post.frontmatter.title}
+        date={post.frontmatter.date}
+        duration={post.frontmatter.duration}
       />
     </Layout>
   )
@@ -122,9 +127,10 @@ export const pageQuery = graphql`
       id
       html
       frontmatter {
-        date(formatString: "MMMM DD, YYYY")
+        date(formatString: "MMMM DD, YYYY HH:mm")
         title
         description
+        duration
       }
     }
   }

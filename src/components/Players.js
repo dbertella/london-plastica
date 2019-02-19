@@ -8,15 +8,16 @@ const Players = ({ date }) => {
       .then(res => setPlayers(res.data))
   }, [])
 
-  const countAvailable = players.filter(([available]) => available).length
+  // const countAvailable = players.filter(([available]) => available).length
+  console.log(players)
   return (
     <div>
-      <h3>Players ({countAvailable} available)</h3>
+      {/* <h3>Players ({countAvailable} available)</h3>
       {players.map(([available, name]) => (
         <div key={name}>
           {name} - {available ? '👍' : '👎'}
         </div>
-      ))}
+      ))} */}
     </div>
   )
 }

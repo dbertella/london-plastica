@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import netlifyIdentity from 'netlify-identity-widget'
+import React from 'react'
 import { isEmpty } from 'lodash'
-
+import { useCurrentUser } from './currentUser'
 const headers = { 'Content-Type': 'application/json' }
 
+
 const Book = ({ date }) => {
-  const [currentUser, setCurrentUser] = useState({})
+  const currentUser = useCurrentUser()
   const imIn = () =>
     fetch('/.netlify/functions/book-a-spot', {
       method: 'POST',
       headers,
       body: JSON.stringify({
-        // email: currentUser.email,
+        email: currentUser.email,
         name: currentUser.user_metadata.full_name,
         date,
-        availability: true
+        available: true
       })
     })
       .then(response => response.json())
@@ -24,20 +24,17 @@ const Book = ({ date }) => {
     fetch('/.netlify/functions/book-a-spot', {
       method: 'POST',
       headers,
-      body: {
+      body: JSON.stringify({
         email: currentUser.email,
         name: currentUser.user_metadata.full_name,
         date,
-        availability: false
-      }
+        available: false
+      })
     })
       .then(response => response.json())
       .then(r => console.log(r))
 
-  useEffect(() => {
-    netlifyIdentity.init()
-    setCurrentUser(netlifyIdentity.currentUser())
-  }, [])
+
 
   return (
     <div>
@@ -46,10 +43,10 @@ const Book = ({ date }) => {
           <h3>Book your spot</h3>
           <div className="buttons are-medium">
             <button className="button" onClick={imIn}>
-              I'm in
+              👍 I'm in
             </button>
             <button className="button" onClick={imOut}>
-              Not available
+              👎 Not available
             </button>
           </div>
         </>

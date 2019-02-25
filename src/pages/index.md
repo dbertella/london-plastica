@@ -1,7 +1,7 @@
 ---
 templateKey: index-page
 title: London Plastica
-image: /img/home-jumbotron.jpg
+image: /img/l-250025-1361828340-5390.jpeg.jpg
 subheading: Basketball team
 mainpitch:
   description: >

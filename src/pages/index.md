@@ -1,6 +1,6 @@
 ---
 templateKey: index-page
-title: Mesomediterannian Basketball Alliance (MBA)
+title: Mesomediterranean Basketball Alliance (MBA)
 image: /img/l-250025-1361828340-5390.jpeg.jpg
 subheading: Basketball team
 mainpitch:

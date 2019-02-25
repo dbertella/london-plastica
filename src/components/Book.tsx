@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { isEmpty } from 'lodash'
 import { useCurrentUser } from './currentUser'
+import { User } from 'netlify-identity-widget'
+
 const headers = { 'Content-Type': 'application/json' }
-
-
-const Book = ({ date }) => {
-  const currentUser = useCurrentUser()
+const Book: FC<{ date: string }> = ({ date }) => {
+  const currentUser = useCurrentUser() as User
   const imIn = () =>
     fetch('/.netlify/functions/book-a-spot', {
       method: 'POST',
@@ -19,7 +19,6 @@ const Book = ({ date }) => {
     })
       .then(response => response.json())
       .then(r => console.log(r))
-
   const imOut = () =>
     fetch('/.netlify/functions/book-a-spot', {
       method: 'POST',
@@ -33,9 +32,6 @@ const Book = ({ date }) => {
     })
       .then(response => response.json())
       .then(r => console.log(r))
-
-
-
   return (
     <div>
       {!isEmpty(currentUser) && (
@@ -54,5 +50,4 @@ const Book = ({ date }) => {
     </div>
   )
 }
-
 export default Book

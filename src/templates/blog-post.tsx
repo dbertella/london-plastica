@@ -1,5 +1,4 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { FC, ReactNode } from 'react'
 import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
@@ -8,7 +7,11 @@ import Book from '../components/Book'
 import Content, { HTMLContent } from '../components/Content'
 import { format } from 'date-fns'
 
-export const BlogPostTemplate = ({
+type ContentProps = Partial<{
+  className: string
+  content: string
+}>
+export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
   content,
   contentComponent,
   title,
@@ -16,7 +19,7 @@ export const BlogPostTemplate = ({
   duration,
   helmet
 }) => {
-  const PostContent = contentComponent || Content
+  const PostContent = (contentComponent || Content) as FC<ContentProps>
   return (
     <section className="section">
       {helmet || ''}
@@ -36,16 +39,16 @@ export const BlogPostTemplate = ({
   )
 }
 
-BlogPostTemplate.propTypes = {
-  content: PropTypes.node.isRequired,
-  contentComponent: PropTypes.func,
-  title: PropTypes.string,
-  date: PropTypes.string,
-  duration: PropTypes.string,
-  helmet: PropTypes.object
+type BlogPostTemplateProps = {
+  content: string
+  contentComponent: ReactNode
+  title: string
+  date: string
+  duration: string
+  helmet: ReactNode
 }
 
-const BlogPost = ({ data }) => {
+const BlogPost: FC<BlogPostProps> = ({ data }) => {
   const { markdownRemark: post } = data
   const formattedDate = format(new Date(post.frontmatter.date), 'YYYY-MM-DD')
   return (
@@ -84,10 +87,18 @@ const BlogPost = ({ data }) => {
   )
 }
 
-BlogPost.propTypes = {
-  data: PropTypes.shape({
-    markdownRemark: PropTypes.object
-  })
+type BlogPostProps = {
+  data: {
+    markdownRemark: {
+      id: string
+      html: string
+      frontmatter: {
+        date: string
+        title: string
+        duration: number
+      }
+    }
+  }
 }
 
 export default BlogPost

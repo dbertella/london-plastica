@@ -1,12 +1,10 @@
-import React from 'react'
-import Helmet from 'react-helmet'
-import { StaticQuery, graphql } from 'gatsby'
+import React, { FC } from "react"
+import Helmet from "react-helmet"
+import { StaticQuery, graphql } from "gatsby"
+import Navbar from "../components/Navbar"
+import "./all.sass"
 
-import Navbar from '../components/Navbar'
-
-import './all.sass'
-
-const TemplateWrapper = ({ children }) => (
+const TemplateWrapper: FC = ({ children }) => (
   <StaticQuery
     query={graphql`
       query HeadingQuery {
@@ -64,5 +62,4 @@ const TemplateWrapper = ({ children }) => (
     )}
   />
 )
-
 export default TemplateWrapper

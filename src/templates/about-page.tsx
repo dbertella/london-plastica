@@ -1,11 +1,19 @@
-import React from 'react'
+import React, { ReactNode, FC } from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
 import Content, { HTMLContent } from '../components/Content'
 
-export const AboutPageTemplate = ({ title, content, contentComponent }) => {
-  const PageContent = contentComponent || Content
+type ContentProps = Partial<{
+  className: string
+  content: string
+}>
+export const AboutPageTemplate: FC<AboutPageTemplateProps> = ({
+  title,
+  content,
+  contentComponent
+}) => {
+  const PageContent = (contentComponent || Content) as FC<ContentProps>
 
   return (
     <section className="section section--gradient">
@@ -25,13 +33,13 @@ export const AboutPageTemplate = ({ title, content, contentComponent }) => {
   )
 }
 
-AboutPageTemplate.propTypes = {
-  title: PropTypes.string.isRequired,
-  content: PropTypes.string,
-  contentComponent: PropTypes.func,
+type AboutPageTemplateProps = {
+  title: string
+  content?: string
+  contentComponent?: ReactNode
 }
 
-const AboutPage = ({ data }) => {
+const AboutPage: FC<AboutPageProps> = ({ data }) => {
   const { markdownRemark: post } = data
 
   return (
@@ -45,8 +53,15 @@ const AboutPage = ({ data }) => {
   )
 }
 
-AboutPage.propTypes = {
-  data: PropTypes.object.isRequired,
+type AboutPageProps = {
+  data: {
+    markdownRemark: {
+      html: string
+      frontmatter: {
+        title: string
+      }
+    }
+  }
 }
 
 export default AboutPage

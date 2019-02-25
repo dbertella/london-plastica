@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { FC, useState, useEffect } from 'react'
 
-const Players = ({ date }) => {
+const Players: FC<{ date: string }> = ({ date }) => {
   const [players, setPlayers] = useState([])
   useEffect(() => {
     fetch(`/.netlify/functions/get-all-by-date/${date}`)
       .then(response => response.json())
-      .then(res => setPlayers(Array.isArray(res) ? res.map(r => r.data) : []))
+      .then((res: any[]) => setPlayers(Array.isArray(res) ? res.map(r => r.data) : []))
   }, [])
-
   const countAvailable = players.filter(player => player.available).length
   console.log(players)
   return (
@@ -22,5 +21,4 @@ const Players = ({ date }) => {
     </div>
   )
 }
-
 export default Players

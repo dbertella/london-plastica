@@ -22,10 +22,11 @@ class BlogRoll extends React.Component<BlogRollProps, {}> {
                     className="title has-text-primary is-size-4"
                     to={post.fields.slug}
                   >
-                    {post.frontmatter.title}
+                    {post.frontmatter.date}
+                    <span> &bull; </span>{post.frontmatter.duration} h
                   </Link>
-                  <span> &bull; </span>
-                  <p className="subtitle is-size-5">{post.frontmatter.date}</p>
+                  <br />
+                  <p className="subtitle is-size-5">{post.frontmatter.title}</p>
                 </div>
                 <div>
                   {post.excerpt}
@@ -53,6 +54,7 @@ type EdgeNode = {
     title: string
     templateKey: string
     date: string
+    duration: string
   }
 }
 
@@ -66,7 +68,7 @@ export default () => (
         ) {
           edges {
             node {
-              excerpt(pruneLength: 400)
+              excerpt(pruneLength: 200)
               id
               fields {
                 slug
@@ -75,6 +77,7 @@ export default () => (
                 title
                 templateKey
                 date(formatString: "MMMM DD, YYYY")
+                duration
               }
             }
           }
@@ -82,6 +85,9 @@ export default () => (
       }
     `}
     // @ts-ignore
-    render={(data: BlogRollProps, count: number) => <BlogRoll data={data} count={count} />}
+    render={(data: BlogRollProps, count: number) => (
+      // @ts-ignore
+      <BlogRoll data={data} count={count} />
+    )}
   />
 )

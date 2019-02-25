@@ -1,6 +1,20 @@
 import React, { MouseEvent } from 'react'
 import { Link } from 'gatsby'
-import netlifyIdentity from 'netlify-identity-widget'
+import netlifyIdentity, { User } from 'netlify-identity-widget'
+import { useCurrentUser } from './currentUser'
+
+const LoginButton = () => {
+  const currentUser = useCurrentUser() as User
+  const handleIdentity = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    netlifyIdentity.open()
+  }
+  return (
+    <div className="navbar-end has-text-centered">
+      {!currentUser && <button onClick={handleIdentity}>Login</button>}
+    </div>
+  )
+}
 
 const Navbar = class extends React.Component {
   componentDidMount() {
@@ -24,10 +38,7 @@ const Navbar = class extends React.Component {
       })
     }
   }
-  handleIdentity = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    netlifyIdentity.open()
-  }
+
   render() {
     return (
       <nav
@@ -48,9 +59,7 @@ const Navbar = class extends React.Component {
             </div>
           </div>
           <div id="navMenu" className="navbar-menu">
-            <div className="navbar-end has-text-centered">
-              <button onClick={this.handleIdentity}>Login</button>
-            </div>
+            <LoginButton />
           </div>
         </div>
       </nav>

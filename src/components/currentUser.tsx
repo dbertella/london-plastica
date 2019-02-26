@@ -6,6 +6,7 @@ export const useCurrentUser = () => {
   useEffect(() => {
     netlifyIdentity.init()
     setCurrentUser(netlifyIdentity.currentUser())
+    netlifyIdentity.on('login', user => setCurrentUser(user))
   }, [])
   return currentUser
 }

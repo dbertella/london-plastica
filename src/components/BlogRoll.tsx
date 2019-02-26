@@ -24,19 +24,21 @@ class BlogRoll extends React.Component<BlogRollProps, {}> {
                     className="title has-text-primary is-size-4"
                     to={post.fields.slug}
                   >
-                    {format(post.frontmatter.title, 'dddd D MMMM YYYY')}
-                    <span> &bull; </span>
-                    {post.frontmatter.duration} h
+                    {post.frontmatter.title}
                   </Link>
                   <br />
-                  <p className="subtitle is-size-5">
-                    {post.frontmatter.subtitle} {post.frontmatter.location}
-                  </p>
+                  <p className="subtitle is-size-5">{post.frontmatter.subtitle}</p>
                 </div>
                 <div>
-                  {post.excerpt}
-                  <br />
-                  <br />
+                  <div>
+                    <strong>When:</strong> {post.frontmatter.date}
+                  </div>
+                  <div>
+                    <strong>Where:</strong> {post.frontmatter.location}
+                  </div>
+                  <div>
+                    <strong>How long:</strong> {post.frontmatter.duration} h
+                  </div>
                   <Link className="button" to={post.fields.slug}>
                     Book your spot →
                   </Link>
@@ -50,7 +52,6 @@ class BlogRoll extends React.Component<BlogRollProps, {}> {
 }
 
 type EdgeNode = {
-  excerpt: string
   id: string
   fields: {
     slug: string
@@ -59,6 +60,7 @@ type EdgeNode = {
     title: string
     templateKey: string
     subtitle: string
+    date: string
     duration: string
     location: string
   }
@@ -74,7 +76,6 @@ export default () => (
         ) {
           edges {
             node {
-              excerpt(pruneLength: 200)
               id
               fields {
                 slug
@@ -83,6 +84,7 @@ export default () => (
                 subtitle
                 templateKey
                 title
+                date(formatString: "dddd, DD MMMM YYYY @ HH:mm")
                 duration
                 location
               }

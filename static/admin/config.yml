@@ -13,8 +13,9 @@ collections:
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - {label: "Template Key", name: "templateKey", widget: "hidden", default: "blog-post"}
-      - {label: "Match Date", name: "title", widget: "datetime", format: "LLL"}
-      - {label: "Subtitle", name: "subtitle", widget: "string", default: "Half court @"}
+      - {label: "Match Date", name: "date", widget: "datetime"}
+      - {label: "title", name: "title", widget: "string", default: ""}
+      - {label: "subtitle", name: "subtitle", widget: "string", default: "From 11:00 to 13:00"}
       - {label: "Location", name: "location", widget: "string", default: "Britannia"}
       - {label: "Match Duration", name: "duration", widget: "number", default: "2"}
       - {label: "Price", name: "price", widget: "number", default: "40"}

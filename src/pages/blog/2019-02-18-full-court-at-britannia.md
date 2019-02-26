@@ -1,7 +1,8 @@
 ---
 templateKey: blog-post
-title: 2019-03-10T00:00:00.000Z
-subtitle: Full curt @
+title: Sunday 10 March Full Curt
+date: 2019-03-10T12:00:00.000Z
+subtitle: From 12:00 to 14:00
 location: Britannia
 duration: '2'
 price: '40'

@@ -4,14 +4,15 @@ import { BlogPostTemplate } from '../../templates/blog-post'
 import { format } from 'date-fns'
 
 const BlogPostPreview = ({ entry, widgetFor }) => {
-  const formattedDate = format(entry.getIn(['data', 'title']), 'dddd D MMMM YYYY')
+  const formattedDate = format(entry.getIn(['data', 'date']), 'dddd D MMMM YYYY')
   return (
   <BlogPostTemplate
     content={widgetFor('body')}
     description={entry.getIn(['data', 'description'])}
     tags={entry.getIn(['data', 'tags'])}
+    title={entry.getIn(['data', 'title'])}
     subtitle={entry.getIn(['data', 'subtitle'])}
-    title={formattedDate}
+    date={formattedDate}
     duration={entry.getIn(['data', 'duration'])}
     location={entry.getIn(['data', 'location'])}
     price={entry.getIn(['data', 'price'])}

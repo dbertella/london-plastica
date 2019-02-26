@@ -26,6 +26,7 @@ export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
   title,
   duration,
   location,
+  date,
   image,
   helmet
 }) => {
@@ -53,8 +54,6 @@ export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
           }}
         >
           {title}
-          <span> &bull; </span>
-          {duration} h
         </h1>
         <h3
           className="has-text-weight-bold is-size-5-mobile is-size-5-tablet is-size-4-widescreen"
@@ -66,7 +65,7 @@ export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
             padding: '0.25em'
           }}
         >
-          {subtitle} {location}
+          {subtitle}
         </h3>
       </FlexWrapper>
       <section className="section">
@@ -74,6 +73,15 @@ export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
         <div className="container content">
           <div className="columns">
             <div className="column is-10 is-offset-1">
+              <div>
+                <strong>When:</strong> {date}
+              </div>
+              <div>
+                <strong>Where:</strong> {location}
+              </div>
+              <div>
+                <strong>How long:</strong> {duration} h
+              </div>
               <PostContent content={content} />
             </div>
           </div>
@@ -89,6 +97,7 @@ type BlogPostTemplateProps = {
   subtitle: string
   title: string
   duration: string
+  date: string
   location: string
   image: ImageSharp | string
   helmet: ReactNode
@@ -96,8 +105,7 @@ type BlogPostTemplateProps = {
 
 const BlogPost: FC<BlogPostProps> = ({ data }) => {
   const { markdownRemark: post } = data
-  const formattedTitle = format(post.frontmatter.title, 'dddd D MMMM YYYY')
-  const formattedDate = format(post.frontmatter.title, 'YYYY-MM-DD')
+  const formattedDate = format(post.frontmatter.date, 'YYYY-MM-DD')
   return (
     <Layout>
       <BlogPostTemplate
@@ -105,12 +113,13 @@ const BlogPost: FC<BlogPostProps> = ({ data }) => {
         contentComponent={HTMLContent}
         helmet={
           <Helmet titleTemplate="%s | Game">
-            <title>{`${post.frontmatter.subtitle}`}</title>
+            <title>{`${post.frontmatter.title}`}</title>
           </Helmet>
         }
+        date={post.frontmatter.date}
         image={post.frontmatter.image}
         subtitle={post.frontmatter.subtitle}
-        title={formattedTitle}
+        title={post.frontmatter.title}
         duration={String(post.frontmatter.duration)}
         location={post.frontmatter.location}
       />
@@ -147,6 +156,7 @@ type BlogPostProps = {
       frontmatter: {
         title: string
         subtitle: string
+        date: string
         duration: number
         price: number
         location: string
@@ -174,6 +184,7 @@ export const pageQuery = graphql`
         }
         title
         subtitle
+        date(formatString: "dddd, DD MMMM YYYY @ HH:mm")
         duration
         price
         location

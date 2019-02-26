@@ -7,17 +7,12 @@ import Content, { HTMLContent } from '../components/Content'
 import { format } from 'date-fns'
 import styled from 'styled-components'
 
-const FlexWrapper = styled.div`
+const FlexWrapper = styled.span`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-`
-const Price = styled.strong`
-  display: inline-block;
-  background: #777;
-  color: #fff;
-  padding: 0.25rem;
-  border-radius: 2px;
+  flex-flow: column wrap;
+  * {
+    margin: 1rem 0;
+  }
 `
 
 type ContentProps = Partial<{
@@ -32,28 +27,60 @@ export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
   duration,
   location,
   price,
+  image,
   helmet
 }) => {
   const PostContent = (contentComponent || Content) as FC<ContentProps>
   return (
-    <section className="section">
-      {helmet || ''}
-      <div className="container content">
-        <div className="columns">
-          <div className="column is-10 is-offset-1">
-            <h1 className="title is-size-2 has-text-weight-bold is-bold-light">
-              {date}
-              <span> &bull; </span>
-              {duration} h
-            </h1>
-            <FlexWrapper>
-              {title} {location} <Price>£ {price}</Price>
-            </FlexWrapper>
-            <PostContent content={content} />
+    <>
+      <FlexWrapper
+        className="full-width-image margin-top-0"
+        style={{
+          backgroundImage: `url(${
+            typeof image !== 'string' ? image.childImageSharp.fluid.src : image
+          })`,
+          backgroundPosition: `top left`,
+          backgroundAttachment: `fixed`
+        }}
+      >
+        <h1
+          className="has-text-weight-bold is-size-3-mobile is-size-2-tablet is-size-1-widescreen"
+          style={{
+            boxShadow: 'rgb(255, 68, 0) 0.5rem 0px 0px, rgb(255, 68, 0) -0.5rem 0px 0px',
+            backgroundColor: 'rgb(255, 68, 0)',
+            color: 'white',
+            lineHeight: '1',
+            padding: '0.25em'
+          }}
+        >
+          {date}
+          <span> &bull; </span>
+          {duration} h
+        </h1>
+        <h3
+          className="has-text-weight-bold is-size-5-mobile is-size-5-tablet is-size-4-widescreen"
+          style={{
+            boxShadow: 'rgb(255, 68, 0) 0.5rem 0px 0px, rgb(255, 68, 0) -0.5rem 0px 0px',
+            backgroundColor: 'rgb(255, 68, 0)',
+            color: 'white',
+            lineHeight: '1',
+            padding: '0.25em'
+          }}
+        >
+          {title} {location}
+        </h3>
+      </FlexWrapper>
+      <section className="section">
+        {helmet || ''}
+        <div className="container content">
+          <div className="columns">
+            <div className="column is-10 is-offset-1">
+              <PostContent content={content} />
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   )
 }
 
@@ -65,6 +92,7 @@ type BlogPostTemplateProps = {
   duration: string
   location: string
   price: string
+  image: ImageSharp | string
   helmet: ReactNode
 }
 
@@ -81,6 +109,7 @@ const BlogPost: FC<BlogPostProps> = ({ data }) => {
             <title>{`${post.frontmatter.title}`}</title>
           </Helmet>
         }
+        image={post.frontmatter.image}
         title={post.frontmatter.title}
         date={post.frontmatter.date}
         duration={String(post.frontmatter.duration)}
@@ -100,6 +129,14 @@ const BlogPost: FC<BlogPostProps> = ({ data }) => {
   )
 }
 
+type ImageSharp = {
+  childImageSharp: {
+    fluid: {
+      src: string
+    }
+  }
+}
+
 type BlogPostProps = {
   data: {
     markdownRemark: {
@@ -111,6 +148,7 @@ type BlogPostProps = {
         duration: number
         price: number
         location: string
+        image: ImageSharp | string
       }
     }
   }
@@ -124,6 +162,13 @@ export const pageQuery = graphql`
       id
       html
       frontmatter {
+        image {
+          childImageSharp {
+            fluid(maxWidth: 2048, quality: 100) {
+              ...GatsbyImageSharpFluid
+            }
+          }
+        }
         date(formatString: "MMMM DD, YYYY HH:mm")
         title
         duration

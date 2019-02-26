@@ -3,6 +3,15 @@ import { Link, graphql } from 'gatsby'
 
 import Layout from '../components/Layout'
 import BlogRoll from '../components/BlogRoll'
+import styled from 'styled-components'
+
+const FlexWrapper = styled.span`
+  display: flex;
+  flex-flow: column wrap;
+  * {
+    margin: 1rem 0;
+  }
+`
 
 export const IndexPageTemplate: FC<IndexPageTemplateProps> = ({
   image,
@@ -11,7 +20,7 @@ export const IndexPageTemplate: FC<IndexPageTemplateProps> = ({
   mainpitch
 }) => (
   <div>
-    <div
+    <FlexWrapper
       className="full-width-image margin-top-0"
       style={{
         backgroundImage: `url(${
@@ -21,42 +30,31 @@ export const IndexPageTemplate: FC<IndexPageTemplateProps> = ({
         backgroundAttachment: `fixed`
       }}
     >
-      <div
+      <h1
+        className="has-text-weight-bold is-size-3-mobile is-size-2-tablet is-size-1-widescreen"
         style={{
-          display: 'flex',
-          height: '150px',
+          boxShadow: 'rgb(255, 68, 0) 0.5rem 0px 0px, rgb(255, 68, 0) -0.5rem 0px 0px',
+          backgroundColor: 'rgb(255, 68, 0)',
+          color: 'white',
           lineHeight: '1',
-          justifyContent: 'space-around',
-          alignItems: 'left',
-          flexDirection: 'column'
+          padding: '0.25em'
         }}
       >
-        <h1
-          className="has-text-weight-bold is-size-3-mobile is-size-2-tablet is-size-1-widescreen"
-          style={{
-            boxShadow: 'rgb(255, 68, 0) 0.5rem 0px 0px, rgb(255, 68, 0) -0.5rem 0px 0px',
-            backgroundColor: 'rgb(255, 68, 0)',
-            color: 'white',
-            lineHeight: '1',
-            padding: '0.25em'
-          }}
-        >
-          {title}
-        </h1>
-        <h3
-          className="has-text-weight-bold is-size-5-mobile is-size-5-tablet is-size-4-widescreen"
-          style={{
-            boxShadow: 'rgb(255, 68, 0) 0.5rem 0px 0px, rgb(255, 68, 0) -0.5rem 0px 0px',
-            backgroundColor: 'rgb(255, 68, 0)',
-            color: 'white',
-            lineHeight: '1',
-            padding: '0.25em'
-          }}
-        >
-          {subheading}
-        </h3>
-      </div>
-    </div>
+        {title}
+      </h1>
+      <h3
+        className="has-text-weight-bold is-size-5-mobile is-size-5-tablet is-size-4-widescreen"
+        style={{
+          boxShadow: 'rgb(255, 68, 0) 0.5rem 0px 0px, rgb(255, 68, 0) -0.5rem 0px 0px',
+          backgroundColor: 'rgb(255, 68, 0)',
+          color: 'white',
+          lineHeight: '1',
+          padding: '0.25em'
+        }}
+      >
+        {subheading}
+      </h3>
+    </FlexWrapper>
     <section className="section section--gradient">
       <div className="container content">
         <div className="columns">

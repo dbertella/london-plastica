@@ -8,16 +8,24 @@ const FlexWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  * + * {
-    margin-left: 1rem;
-  }
+  position: relative;
 `
 const SmallBtn = styled.button`
-  border-radius: 2px;
-  font-size: 0.75rem;
-  background-color: #f5f5f5;
-  border-color: transparent;
+  font-size: 0.65rem;
+  background: none;
+  border: 0;
   color: #363636;
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+`
+const MonzoMe = styled.a`
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='311' height='69'%3E%3Cg data-name='Layer 3'%3E%3Cpath fill='%23e34b5f' d='M76 50a4 4 0 0 1-1 2L59 68a1 1 0 0 1-2-1V32l19-19z'/%3E%3Cpath fill='%23e7ce9c' d='M63 0a1 1 0 0 0-2 0L38 24v27l19-19 19-19z'/%3E%3Cpath fill='%231e7889' d='M0 50a4 4 0 0 0 1 2l16 16a1 1 0 0 0 2-1V32L0 13z'/%3E%3Cpath fill='%2397baa6' d='M15 0a1 1 0 0 0-2 0L0 13l19 19 19 19V24z'/%3E%3Cpath fill='%23fff' d='M100 50V15h9v4a10 10 0 0 1 10-5 11 11 0 0 1 9 6c4-4 7-6 11-6 8 0 13 4 13 13v23h-10V31c0-5-1-7-5-7s-6 2-6 7v19h-11V31c0-5-1-7-4-7s-6 2-6 7v19zm64-31a19 19 0 0 1 32 13 18 18 0 0 1-5 13 18 18 0 0 1-14 6 17 17 0 0 1-13-6 18 18 0 0 1-5-13 18 18 0 0 1 5-13zm13 22a9 9 0 0 0 9-9 8 8 0 1 0-17 0 9 9 0 0 0 8 9zm26 9V15h10v4c2-3 5-5 10-5 7 0 12 5 12 13v23h-10V31c0-5-1-7-5-7s-7 2-7 7v19zm76-31a19 19 0 0 1 32 13 18 18 0 0 1-5 13 18 18 0 0 1-13 6 17 17 0 0 1-14-6 18 18 0 0 1-5-13 18 18 0 0 1 5-13zm14 22a9 9 0 0 0 8-9 8 8 0 1 0-17 0 9 9 0 0 0 9 9zm-50 9v-7l14-19h-14v-9h26v8l-13 18h13v9z'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 60px;
+  background-position: 0.7rem center;
+  background-repeat: no-repeat;
+  padding-left: 2rem;
 `
 
 type Player = {
@@ -75,30 +83,28 @@ const Players: FC<Props> = ({ date, price, monzouser }) => {
           <span className="is-size-3">
             <span>{available ? '👍' : '👎'}</span> <strong>{name}</strong>
           </span>
-          <FlexWrapper>
-            {currentUser && currentUser.email === email && (
-              <SmallBtn
-                className="button"
-                onClick={() => updatePreference(ref['@ref'].id, !available)}
-              >
-                Update avalability
-              </SmallBtn>
-            )}
-            {available ? (
-              <a
-                className="button"
-                target="_blank"
-                href={
-                  monzouser &&
-                  `https://monzo.me/${monzouser}/${pricePerPlayer}?d=🏀⛹️⛹️⛹️🏀`
-                }
-              >
-                £ {pricePerPlayer}
-              </a>
-            ) : (
-              <span>💔</span>
-            )}
-          </FlexWrapper>
+          {currentUser && currentUser.email === email && (
+            <SmallBtn
+              className="button"
+              onClick={() => updatePreference(ref['@ref'].id, !available)}
+            >
+              Update availability
+            </SmallBtn>
+          )}
+          {available ? (
+            <MonzoMe
+              className="button"
+              target="_blank"
+              href={
+                monzouser &&
+                `https://monzo.me/${monzouser}/${pricePerPlayer}?d=🏀⛹️⛹️⛹️🏀`
+              }
+            >
+              £ {pricePerPlayer.toFixed(2)}
+            </MonzoMe>
+          ) : (
+            <span>💔</span>
+          )}
         </FlexWrapper>
       ))}
       {!bookedAlready && <Book date={date} />}

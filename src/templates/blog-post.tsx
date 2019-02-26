@@ -22,8 +22,8 @@ type ContentProps = Partial<{
 export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
   content,
   contentComponent,
+  subtitle,
   title,
-  date,
   duration,
   location,
   image,
@@ -36,7 +36,7 @@ export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
         className="full-width-image margin-top-0"
         style={{
           backgroundImage: `url(${
-            typeof image !== 'string' ? image.childImageSharp.fluid.src : image
+            image && typeof image !== 'string' ? image.childImageSharp.fluid.src : image
           })`,
           backgroundPosition: `center center`,
           backgroundAttachment: `fixed`
@@ -52,7 +52,7 @@ export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
             padding: '0.25em'
           }}
         >
-          {date}
+          {title}
           <span> &bull; </span>
           {duration} h
         </h1>
@@ -66,7 +66,7 @@ export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
             padding: '0.25em'
           }}
         >
-          {title} {location}
+          {subtitle} {location}
         </h3>
       </FlexWrapper>
       <section className="section">
@@ -86,8 +86,8 @@ export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
 type BlogPostTemplateProps = {
   content: string
   contentComponent: ReactNode
+  subtitle: string
   title: string
-  date: string
   duration: string
   location: string
   image: ImageSharp | string
@@ -96,7 +96,8 @@ type BlogPostTemplateProps = {
 
 const BlogPost: FC<BlogPostProps> = ({ data }) => {
   const { markdownRemark: post } = data
-  const formattedDate = format(new Date(post.frontmatter.date), 'YYYY-MM-DD')
+  const formattedTitle = format(post.frontmatter.title, 'dddd D MMMM YYYY')
+  const formattedDate = format(post.frontmatter.title, 'YYYY-MM-DD')
   return (
     <Layout>
       <BlogPostTemplate
@@ -104,12 +105,12 @@ const BlogPost: FC<BlogPostProps> = ({ data }) => {
         contentComponent={HTMLContent}
         helmet={
           <Helmet titleTemplate="%s | Game">
-            <title>{`${post.frontmatter.title}`}</title>
+            <title>{`${post.frontmatter.subtitle}`}</title>
           </Helmet>
         }
         image={post.frontmatter.image}
-        title={post.frontmatter.title}
-        date={post.frontmatter.date}
+        subtitle={post.frontmatter.subtitle}
+        title={formattedTitle}
         duration={String(post.frontmatter.duration)}
         location={post.frontmatter.location}
       />
@@ -144,8 +145,8 @@ type BlogPostProps = {
       id: string
       html: string
       frontmatter: {
-        date: string
         title: string
+        subtitle: string
         duration: number
         price: number
         location: string
@@ -171,8 +172,8 @@ export const pageQuery = graphql`
             }
           }
         }
-        date(formatString: "MMMM DD, YYYY HH:mm")
         title
+        subtitle
         duration
         price
         location

@@ -1,5 +1,7 @@
 import React from 'react'
 import { Link, graphql, StaticQuery } from 'gatsby'
+import { format } from 'date-fns'
+
 type BlogRollProps = {
   data: {
     allMarkdownRemark: {
@@ -22,13 +24,13 @@ class BlogRoll extends React.Component<BlogRollProps, {}> {
                     className="title has-text-primary is-size-4"
                     to={post.fields.slug}
                   >
-                    {post.frontmatter.date}
+                    {format(post.frontmatter.title, 'dddd D MMMM YYYY')}
                     <span> &bull; </span>
                     {post.frontmatter.duration} h
                   </Link>
                   <br />
                   <p className="subtitle is-size-5">
-                    {post.frontmatter.title} {post.frontmatter.location}
+                    {post.frontmatter.subtitle} {post.frontmatter.location}
                   </p>
                 </div>
                 <div>
@@ -36,7 +38,7 @@ class BlogRoll extends React.Component<BlogRollProps, {}> {
                   <br />
                   <br />
                   <Link className="button" to={post.fields.slug}>
-                    Keep Reading →
+                    Book your spot →
                   </Link>
                 </div>
               </article>
@@ -56,7 +58,7 @@ type EdgeNode = {
   frontmatter: {
     title: string
     templateKey: string
-    date: string
+    subtitle: string
     duration: string
     location: string
   }
@@ -67,7 +69,7 @@ export default () => (
     query={graphql`
       query BlogRollQuery {
         allMarkdownRemark(
-          sort: { order: DESC, fields: [frontmatter___date] }
+          sort: { order: DESC, fields: [frontmatter___title] }
           filter: { frontmatter: { templateKey: { eq: "blog-post" } } }
         ) {
           edges {
@@ -78,9 +80,9 @@ export default () => (
                 slug
               }
               frontmatter {
-                title
+                subtitle
                 templateKey
-                date(formatString: "MMMM DD, YYYY")
+                title
                 duration
                 location
               }

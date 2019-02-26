@@ -5,10 +5,18 @@ import { useCurrentUser } from './currentUser'
 import Book from './Book'
 
 const FlexWrapper = styled.div`
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 3px rgba(43, 37, 35, 0.1), 0 0 0 1px rgba(43, 37, 35, 0.1);
+  color: #4a4a4a;
+  padding: 1.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: relative;
+  :not(:last-child) {
+    margin-bottom: 1.5rem;
+  }
 `
 const SmallBtn = styled.button`
   font-size: 0.65rem;
@@ -16,7 +24,7 @@ const SmallBtn = styled.button`
   border: 0;
   color: #363636;
   position: absolute;
-  bottom: -3px;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
 `
@@ -25,7 +33,7 @@ const MonzoMe = styled.a`
   background-size: 60px;
   background-position: 0.7rem center;
   background-repeat: no-repeat;
-  padding-left: 2rem;
+  padding-left: 2rem !important;
 `
 
 type Player = {
@@ -79,13 +87,12 @@ const Players: FC<Props> = ({ date, price, monzouser }) => {
         Players ({countAvailable} available, {countNotAvailable} not available)
       </h3>
       {players.map(({ ref, data: { available, name, email } }) => (
-        <FlexWrapper key={ref['@ref'].id} className="box">
+        <FlexWrapper key={ref['@ref'].id}>
           <span className="is-size-3">
             <span>{available ? '👍' : '👎'}</span> <strong>{name}</strong>
           </span>
           {currentUser && currentUser.email === email && (
             <SmallBtn
-              className="button"
               onClick={() => updatePreference(ref['@ref'].id, !available)}
             >
               Update availability

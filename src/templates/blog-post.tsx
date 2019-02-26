@@ -6,6 +6,20 @@ import Players from '../components/Players'
 import Book from '../components/Book'
 import Content, { HTMLContent } from '../components/Content'
 import { format } from 'date-fns'
+import styled from 'styled-components'
+
+const FlexWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+const Price = styled.strong`
+  display: inline-block;
+  background: #777;
+  color: #fff;
+  padding: 0.25rem;
+  border-radius: 2px;
+`
 
 type ContentProps = Partial<{
   className: string
@@ -29,10 +43,13 @@ export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
         <div className="columns">
           <div className="column is-10 is-offset-1">
             <h1 className="title is-size-2 has-text-weight-bold is-bold-light">
-              {date}<span> &bull; </span>{duration} h
+              {date}
+              <span> &bull; </span>
+              {duration} h
             </h1>
-            <p>{title} {location}</p>
-            <p>£ {price}</p>
+            <FlexWrapper>
+              {title} {location} <Price>£ {price}</Price>
+            </FlexWrapper>
             <PostContent content={content} />
           </div>
         </div>
@@ -75,7 +92,7 @@ const BlogPost: FC<BlogPostProps> = ({ data }) => {
         <div className="container content">
           <div className="columns">
             <div className="column is-10 is-offset-1">
-              <Players date={formattedDate} />
+              <Players date={formattedDate} price={post.frontmatter.price} />
             </div>
           </div>
         </div>

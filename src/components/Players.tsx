@@ -1,6 +1,20 @@
 import React, { FC, useState, useEffect } from 'react'
+import styled from 'styled-components'
 import { User } from 'netlify-identity-widget'
 import { useCurrentUser } from './currentUser'
+
+const FlexWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+const SmallBtn = styled.button`
+  border-radius: 2px;
+  font-size: 0.75rem;
+  background-color: #f5f5f5;
+  border-color: transparent;
+  color: #363636;
+`
 
 type Player = {
   available: boolean
@@ -18,12 +32,13 @@ type Response = {
   }
 }
 
-const Players: FC<{ date: string }> = ({ date }) => {
+const Players: FC<{ date: string; price: number }> = ({ date, price }) => {
   const [players, setPlayers] = useState<Response[]>([])
 
-  const fetchPlayers = () => fetch(`/.netlify/functions/get-all-by-date/${date}`)
-    .then(response => response.json())
-    .then((res: Response[]) => setPlayers(res))
+  const fetchPlayers = () =>
+    fetch(`/.netlify/functions/get-all-by-date/${date}`)
+      .then(response => response.json())
+      .then((res: Response[]) => setPlayers(res))
   useEffect(() => {
     fetchPlayers()
   }, [])
@@ -40,20 +55,25 @@ const Players: FC<{ date: string }> = ({ date }) => {
 
   const countAvailable = players.filter(player => player.data.available).length
   const currentUser = useCurrentUser() as User
-  console.log(players, currentUser)
+  const pricePerPlayer = price / countAvailable
   return (
     <div>
       <h3>Players ({countAvailable} available)</h3>
       {players.map(({ ref, data: { available, name, email } }) => (
-        <div key={ref['@ref'].id} className="box">
-          <span className="is-size-3">{available ? '👍' : '👎'}</span>
-          <strong>{name}</strong>
+        <FlexWrapper key={ref['@ref'].id} className="box">
+          <span className="is-size-3">
+            {available ? '👍' : '👎'} <strong>{name}</strong>
+          </span>
+          {available && <span>£ {pricePerPlayer}</span>}
           {currentUser && currentUser.email === email && (
-            <button className="button is-small is-light" onClick={() => updatePreference(ref['@ref'].id, !available)}>
+            <SmallBtn
+              className="button"
+              onClick={() => updatePreference(ref['@ref'].id, !available)}
+            >
               Update avalability
-            </button>
+            </SmallBtn>
           )}
-        </div>
+        </FlexWrapper>
       ))}
     </div>
   )

@@ -54,7 +54,7 @@ const TemplateWrapper: FC = ({ children }) => (
           <meta property="og:type" content="business.business" />
           <meta property="og:title" content={data.site.siteMetadata.title} />
           <meta property="og:url" content="/" />
-          <meta property="og:image" content="/img/og-image.jpg" />
+          <meta property="og:image" content="/img/l-250025-1361828340-5390.jpeg.jpg" />
         </Helmet>
         <Navbar />
         <div>{children}</div>

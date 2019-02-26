@@ -5,7 +5,7 @@ import BlogRoll from '../../components/BlogRoll'
 
 export default class BlogIndexPage extends React.Component {
   render() {
-    
+
   return (
       <Layout>
         <section className="section">
@@ -26,7 +26,7 @@ export default class BlogIndexPage extends React.Component {
                     padding: '1rem',
                   }}
                 >
-                  Latest Stories
+                  All Matches
                 </h1>
               </div>
             </div>

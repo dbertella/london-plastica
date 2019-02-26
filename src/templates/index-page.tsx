@@ -26,7 +26,7 @@ export const IndexPageTemplate: FC<IndexPageTemplateProps> = ({
         backgroundImage: `url(${
           typeof image !== 'string' ? image.childImageSharp.fluid.src : image
         })`,
-        backgroundPosition: `top left`,
+        backgroundPosition: `center center`,
         backgroundAttachment: `fixed`
       }}
     >

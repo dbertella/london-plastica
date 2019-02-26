@@ -26,7 +26,6 @@ export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
   date,
   duration,
   location,
-  price,
   image,
   helmet
 }) => {
@@ -39,7 +38,7 @@ export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
           backgroundImage: `url(${
             typeof image !== 'string' ? image.childImageSharp.fluid.src : image
           })`,
-          backgroundPosition: `top left`,
+          backgroundPosition: `center center`,
           backgroundAttachment: `fixed`
         }}
       >
@@ -91,7 +90,6 @@ type BlogPostTemplateProps = {
   date: string
   duration: string
   location: string
-  price: string
   image: ImageSharp | string
   helmet: ReactNode
 }
@@ -113,14 +111,17 @@ const BlogPost: FC<BlogPostProps> = ({ data }) => {
         title={post.frontmatter.title}
         date={post.frontmatter.date}
         duration={String(post.frontmatter.duration)}
-        price={String(post.frontmatter.price)}
         location={post.frontmatter.location}
       />
       <section className="section">
         <div className="container content">
           <div className="columns">
             <div className="column is-10 is-offset-1">
-              <Players date={formattedDate} price={post.frontmatter.price} />
+              <Players
+                date={formattedDate}
+                price={post.frontmatter.price}
+                monzouser={post.frontmatter.monzouser}
+              />
             </div>
           </div>
         </div>
@@ -148,6 +149,7 @@ type BlogPostProps = {
         duration: number
         price: number
         location: string
+        monzouser: string
         image: ImageSharp | string
       }
     }
@@ -174,6 +176,7 @@ export const pageQuery = graphql`
         duration
         price
         location
+        monzouser
       }
     }
   }

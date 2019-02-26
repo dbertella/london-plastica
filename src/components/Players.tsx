@@ -8,6 +8,9 @@ const FlexWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  * + * {
+    margin-left: 1rem;
+  }
 `
 const SmallBtn = styled.button`
   border-radius: 2px;
@@ -33,7 +36,9 @@ type Response = {
   }
 }
 
-const Players: FC<{ date: string; price: number }> = ({ date, price }) => {
+type Props = { date: string; price: number; monzouser?: string }
+
+const Players: FC<Props> = ({ date, price, monzouser }) => {
   const [players, setPlayers] = useState<Response[]>([])
 
   const fetchPlayers = () =>
@@ -55,26 +60,45 @@ const Players: FC<{ date: string; price: number }> = ({ date, price }) => {
       .then(() => fetchPlayers())
 
   const countAvailable = players.filter(player => player.data.available).length
+  const countNotAvailable = players.filter(player => !player.data.available).length
   const currentUser = useCurrentUser() as User
   const pricePerPlayer = price / countAvailable
-  const bookedAlready = currentUser && players.some((p: Response) => currentUser.email === p.data.email)
+  const bookedAlready =
+    currentUser && players.some((p: Response) => currentUser.email === p.data.email)
   return (
     <div>
-      <h3>Players ({countAvailable} available)</h3>
+      <h3>
+        Players ({countAvailable} available, {countNotAvailable} not available)
+      </h3>
       {players.map(({ ref, data: { available, name, email } }) => (
         <FlexWrapper key={ref['@ref'].id} className="box">
           <span className="is-size-3">
-            {available ? '👍' : '👎'} <strong>{name}</strong>
+            <span>{available ? '👍' : '👎'}</span> <strong>{name}</strong>
           </span>
-          {available && <span>£ {pricePerPlayer}</span>}
-          {currentUser && currentUser.email === email && (
-            <SmallBtn
-              className="button"
-              onClick={() => updatePreference(ref['@ref'].id, !available)}
-            >
-              Update avalability
-            </SmallBtn>
-          )}
+          <FlexWrapper>
+            {currentUser && currentUser.email === email && (
+              <SmallBtn
+                className="button"
+                onClick={() => updatePreference(ref['@ref'].id, !available)}
+              >
+                Update avalability
+              </SmallBtn>
+            )}
+            {available ? (
+              <a
+                className="button"
+                target="_blank"
+                href={
+                  monzouser &&
+                  `https://monzo.me/${monzouser}/${pricePerPlayer}?d=🏀⛹️⛹️⛹️🏀`
+                }
+              >
+                £ {pricePerPlayer}
+              </a>
+            ) : (
+              <span>💔</span>
+            )}
+          </FlexWrapper>
         </FlexWrapper>
       ))}
       {!bookedAlready && <Book date={date} />}

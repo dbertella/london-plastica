@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { User } from 'netlify-identity-widget'
 import { useCurrentUser } from './currentUser'
+import Book from './Book'
 
 const FlexWrapper = styled.div`
   display: flex;
@@ -56,6 +57,7 @@ const Players: FC<{ date: string; price: number }> = ({ date, price }) => {
   const countAvailable = players.filter(player => player.data.available).length
   const currentUser = useCurrentUser() as User
   const pricePerPlayer = price / countAvailable
+  const bookedAlready = currentUser && players.some((p: Response) => currentUser.email === p.data.email)
   return (
     <div>
       <h3>Players ({countAvailable} available)</h3>
@@ -75,6 +77,7 @@ const Players: FC<{ date: string; price: number }> = ({ date, price }) => {
           )}
         </FlexWrapper>
       ))}
+      {!bookedAlready && <Book date={date} />}
     </div>
   )
 }

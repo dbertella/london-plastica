@@ -3,7 +3,6 @@ import Helmet from 'react-helmet'
 import { graphql } from 'gatsby'
 import Layout from '../components/Layout'
 import Players from '../components/Players'
-import Book from '../components/Book'
 import Content, { HTMLContent } from '../components/Content'
 import { format } from 'date-fns'
 import styled from 'styled-components'
@@ -93,15 +92,6 @@ const BlogPost: FC<BlogPostProps> = ({ data }) => {
           <div className="columns">
             <div className="column is-10 is-offset-1">
               <Players date={formattedDate} price={post.frontmatter.price} />
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="section">
-        <div className="container content">
-          <div className="columns">
-            <div className="column is-10 is-offset-1">
-              <Book date={formattedDate} />
             </div>
           </div>
         </div>

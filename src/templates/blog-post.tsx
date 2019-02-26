@@ -17,6 +17,8 @@ export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
   title,
   date,
   duration,
+  location,
+  price,
   helmet
 }) => {
   const PostContent = (contentComponent || Content) as FC<ContentProps>
@@ -29,8 +31,8 @@ export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
             <h1 className="title is-size-2 has-text-weight-bold is-bold-light">
               {date}<span> &bull; </span>{duration} h
             </h1>
-            <p>{title}</p>
-            <p></p>
+            <p>{title} {location}</p>
+            <p>£ {price}</p>
             <PostContent content={content} />
           </div>
         </div>
@@ -45,6 +47,8 @@ type BlogPostTemplateProps = {
   title: string
   date: string
   duration: string
+  location: string
+  price: string
   helmet: ReactNode
 }
 
@@ -64,6 +68,8 @@ const BlogPost: FC<BlogPostProps> = ({ data }) => {
         title={post.frontmatter.title}
         date={post.frontmatter.date}
         duration={String(post.frontmatter.duration)}
+        price={String(post.frontmatter.price)}
+        location={post.frontmatter.location}
       />
       <section className="section">
         <div className="container content">
@@ -96,6 +102,8 @@ type BlogPostProps = {
         date: string
         title: string
         duration: number
+        price: number
+        location: string
       }
     }
   }
@@ -112,6 +120,8 @@ export const pageQuery = graphql`
         date(formatString: "MMMM DD, YYYY HH:mm")
         title
         duration
+        price
+        location
       }
     }
   }

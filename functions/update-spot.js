@@ -1,4 +1,5 @@
 import faunadb from 'faunadb'
+import { last } from 'lodash'
 
 const q = faunadb.query
 const client = new faunadb.Client({
@@ -6,14 +7,18 @@ const client = new faunadb.Client({
 })
 
 exports.handler = (event, context, callback) => {
-  const date = last(event.path.split('/'))
-  const data = JSON.parse(event.body)
-  console.log(`Function 'update-spot' invoked. update date: ${date}`)
+  const ref = last(event.path.split('/'))
+  const { available } = JSON.parse(event.body)
+  console.log(`Function 'update-spot' invoked. update ref: ${ref}`)
   return client
     .query(
-      q.Update(q.Ref(`classes/players/${date}/${data.email}`), {
-        available: data.available
-      })
+      q.Update(
+        q.Ref(`classes/players/${ref}`),
+        {
+          data: { available }
+        }
+        // q.Match(q.Index('player_by_day_and_email'), [date, data.email])
+      )
     )
     .then(response => {
       console.log('success', response)

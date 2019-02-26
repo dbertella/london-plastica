@@ -11,7 +11,11 @@ const LoginButton = () => {
   }
   return (
     <div className="navbar-end has-text-centered">
-      {!currentUser && <button onClick={handleIdentity}>Login</button>}
+      {!currentUser && (
+        <button onClick={handleIdentity} className="button">
+          Login
+        </button>
+      )}
     </div>
   )
 }

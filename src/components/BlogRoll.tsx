@@ -23,10 +23,13 @@ class BlogRoll extends React.Component<BlogRollProps, {}> {
                     to={post.fields.slug}
                   >
                     {post.frontmatter.date}
-                    <span> &bull; </span>{post.frontmatter.duration} h
+                    <span> &bull; </span>
+                    {post.frontmatter.duration} h
                   </Link>
                   <br />
-                  <p className="subtitle is-size-5">{post.frontmatter.title}</p>
+                  <p className="subtitle is-size-5">
+                    {post.frontmatter.title} {post.frontmatter.location}
+                  </p>
                 </div>
                 <div>
                   {post.excerpt}
@@ -55,6 +58,7 @@ type EdgeNode = {
     templateKey: string
     date: string
     duration: string
+    location: string
   }
 }
 
@@ -78,6 +82,7 @@ export default () => (
                 templateKey
                 date(formatString: "MMMM DD, YYYY")
                 duration
+                location
               }
             }
           }

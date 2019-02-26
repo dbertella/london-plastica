@@ -14,6 +14,13 @@ const FlexWrapper = styled.span`
     margin: 1rem 0;
   }
 `
+const Info = styled.div`
+  background: #f5f5f5;
+  color: #555;
+  padding: 0.35rem;
+  margin-bottom: 1rem;
+  border-radius: 3px;
+`
 
 type ContentProps = Partial<{
   className: string
@@ -73,15 +80,17 @@ export const BlogPostTemplate: FC<BlogPostTemplateProps> = ({
         <div className="container content">
           <div className="columns">
             <div className="column is-10 is-offset-1">
-              <div>
-                <strong>When:</strong> {date}
-              </div>
-              <div>
-                <strong>Where:</strong> {location}
-              </div>
-              <div>
-                <strong>How long:</strong> {duration} h
-              </div>
+              <Info>
+                <div>
+                  <strong>When:</strong> {date}
+                </div>
+                <div>
+                  <strong>Where:</strong> {location}
+                </div>
+                <div>
+                  <strong>How long:</strong> {duration} h
+                </div>
+              </Info>
               <PostContent content={content} />
             </div>
           </div>

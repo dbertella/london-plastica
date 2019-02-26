@@ -75,43 +75,45 @@ const Players: FC<Props> = ({ date, price, monzouser }) => {
       .then(response => response.json())
       .then(() => fetchPlayers())
 
-  const countAvailable = players.filter(player => player.data.available).length
-  const countNotAvailable = players.filter(player => !player.data.available).length
+  const availablePlayers = players.filter(player => player.data.available)
+  const notAvailablePlayers = players.filter(player => !player.data.available)
+  const countAvailable = availablePlayers.length
   const currentUser = useCurrentUser() as User
-  const pricePerPlayer = price / countAvailable
+  const pricePerPlayer = (price / countAvailable).toFixed(2)
   const bookedAlready =
     currentUser && players.some((p: Response) => currentUser.email === p.data.email)
   return (
     <div>
-      <h3>
-        Players ({countAvailable} available, {countNotAvailable} not available)
-      </h3>
-      {players.map(({ ref, data: { available, name, email } }) => (
+      <h3>👍 In ({countAvailable})</h3>
+      {availablePlayers.map(({ ref, data: { available, name, email } }) => (
         <FlexWrapper key={ref['@ref'].id}>
-          <span className="is-size-3">
-            <span>{available ? '👍' : '👎'}</span> <strong>{name}</strong>
-          </span>
+          <span className="is-size-4">{name}</span>
           {currentUser && currentUser.email === email && (
-            <SmallBtn
-              onClick={() => updatePreference(ref['@ref'].id, !available)}
-            >
+            <SmallBtn onClick={() => updatePreference(ref['@ref'].id, !available)}>
               Update availability
             </SmallBtn>
           )}
-          {available ? (
-            <MonzoMe
-              className="button"
-              target="_blank"
-              href={
-                monzouser &&
-                `https://monzo.me/${monzouser}/${pricePerPlayer}?d=🏀⛹️⛹️⛹️🏀`
-              }
-            >
-              £ {pricePerPlayer.toFixed(2)}
-            </MonzoMe>
-          ) : (
-            <span>💔</span>
+          <MonzoMe
+            className="button"
+            target="_blank"
+            href={
+              monzouser && `https://monzo.me/${monzouser}/${pricePerPlayer}?d=🏀⛹️⛹️⛹️🏀`
+            }
+          >
+            £ {pricePerPlayer}
+          </MonzoMe>
+        </FlexWrapper>
+      ))}
+      <h3>👎 Out ({notAvailablePlayers.length})</h3>
+      {notAvailablePlayers.map(({ ref, data: { available, name, email } }) => (
+        <FlexWrapper key={ref['@ref'].id}>
+          <span className="is-size-4">{name}</span>
+          {currentUser && currentUser.email === email && (
+            <SmallBtn onClick={() => updatePreference(ref['@ref'].id, !available)}>
+              Update availability
+            </SmallBtn>
           )}
+          <span>💔</span>
         </FlexWrapper>
       ))}
       {!bookedAlready && <Book date={date} />}

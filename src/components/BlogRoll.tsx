@@ -1,6 +1,11 @@
 import React from 'react'
 import { Link, graphql, StaticQuery } from 'gatsby'
-import { format } from 'date-fns'
+import styled from 'styled-components'
+
+const Info = styled.div`
+  color: #555;
+  margin: 1rem 0;
+`
 
 type BlogRollProps = {
   data: {
@@ -29,7 +34,7 @@ class BlogRoll extends React.Component<BlogRollProps, {}> {
                   <br />
                   <p className="subtitle is-size-5">{post.frontmatter.subtitle}</p>
                 </div>
-                <div>
+                <Info>
                   <div>
                     <strong>When:</strong> {post.frontmatter.date}
                   </div>
@@ -39,10 +44,10 @@ class BlogRoll extends React.Component<BlogRollProps, {}> {
                   <div>
                     <strong>How long:</strong> {post.frontmatter.duration} h
                   </div>
-                  <Link className="button" to={post.fields.slug}>
-                    Book your spot →
-                  </Link>
-                </div>
+                </Info>
+                <Link className="button" to={post.fields.slug}>
+                  Book your spot →
+                </Link>
               </article>
             </div>
           ))}
